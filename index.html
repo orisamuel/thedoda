@@ -901,7 +901,7 @@
   <p class="hero-sub">עד כמה אתם הדודה של קבוצת הווצאפ שלכם?</p>
   <div class="hero-badge">
     <span class="hero-quote-mark">"</span>
-    אם אין לך מושג מי ה"דודה" בקבוצה שלך,<br>כנראה שמדובר בך
+    אם אין לך מושג מי ה"דודה" בקבוצה שלך<br>כנראה שמדובר בך
     <span class="hero-quote-mark">"</span>
   </div>
 </div>
@@ -1620,7 +1620,7 @@ async function doShare() {
 
   if (navigator.share) {
     try {
-      await navigator.share({ title: 'מדד הדודה 👵', text, url: 'https://the-doda.com' });
+      await navigator.share({ title: 'מדד הדודה 👵', text });
       return;
     } catch (_) {}
   }
