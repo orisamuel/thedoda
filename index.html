@@ -1,0 +1,1726 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <meta name="theme-color" content="#25C16F">
+  <meta property="og:title" content="מדד הדודה 👵">
+  <meta property="og:description" content="בכל קבוצה משפחתית יש דודה. השאלה היא רק אם זה את/ה.">
+  <title>מדד הדודה 👵</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    /* =============================================
+       BASE RESET & VARIABLES
+    ============================================= */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:          #F2EDE6;
+      --bg-alt:      #EAE5DD;
+      --white:       #FFFFFF;
+      --green:       #25C16F;
+      --green-mid:   #1DAF62;
+      --green-dark:  #16874C;
+      --green-pale:  #E4F6EE;
+      --sent:        #D4F5BE;
+      --chat-bg:     #E8DDD5;
+      --text:        #1A1A1E;
+      --text-mid:    #4A5568;
+      --text-soft:   #9AA5B4;
+      --amber:       #F59E0B;
+      --amber-pale:  #FFFBEB;
+      --border:      rgba(0,0,0,0.08);
+      --shadow-sm:   0 2px 8px rgba(0,0,0,0.07), 0 1px 3px rgba(0,0,0,0.05);
+      --shadow:      0 4px 16px rgba(0,0,0,0.09), 0 1px 4px rgba(0,0,0,0.06);
+      --shadow-lg:   0 12px 40px rgba(0,0,0,0.13), 0 3px 10px rgba(0,0,0,0.08);
+      --r:           22px;
+      --r-sm:        13px;
+      --font:        'Rubik', Arial, sans-serif;
+      --spring:      cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      direction: rtl;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* =============================================
+       PROGRESS BAR (sticky top)
+    ============================================= */
+    .progress-bar-wrap {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 200;
+      background: rgba(255,255,255,0.88);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(0,0,0,0.06);
+      padding: 10px 20px 8px;
+    }
+    .progress-top-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 7px;
+    }
+    .progress-app-name {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-mid);
+      letter-spacing: -0.3px;
+    }
+    .progress-app-name span { color: var(--green); }
+    .progress-fraction {
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--green);
+    }
+    .progress-track {
+      height: 4px;
+      background: rgba(0,0,0,0.07);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--green), #6EE7A0);
+      border-radius: 99px;
+      width: 0%;
+      transition: width 0.55s var(--spring);
+    }
+
+    /* =============================================
+       HERO SECTION
+    ============================================= */
+    .hero {
+      padding: 80px 24px 50px;
+      text-align: center;
+      background: linear-gradient(175deg, #ffffff 0%, #f0fdf8 45%, #fefcf5 100%);
+      border-bottom: 1px solid rgba(0,0,0,0.06);
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      width: 300px; height: 300px;
+      background: radial-gradient(circle, rgba(37,193,111,0.08) 0%, transparent 70%);
+      top: -80px; left: -80px;
+      pointer-events: none;
+    }
+    .hero::after {
+      content: '';
+      position: absolute;
+      width: 200px; height: 200px;
+      background: radial-gradient(circle, rgba(245,158,11,0.07) 0%, transparent 70%);
+      bottom: -60px; right: -40px;
+      pointer-events: none;
+    }
+    .hero-bubble {
+      width: 96px; height: 96px;
+      background: linear-gradient(135deg, #ffffff, var(--green-pale));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 50px;
+      margin: 0 auto 22px;
+      box-shadow:
+        0 0 0 10px rgba(37,193,111,0.07),
+        0 4px 24px rgba(37,193,111,0.18);
+      animation: float 3.5s ease-in-out infinite;
+      position: relative;
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) rotate(-2deg); }
+      50%       { transform: translateY(-8px) rotate(2deg); }
+    }
+    .hero h1 {
+      font-size: clamp(30px, 9vw, 48px);
+      font-weight: 900;
+      color: var(--text);
+      letter-spacing: -1.5px;
+      line-height: 1.05;
+      margin-bottom: 10px;
+    }
+    .hero h1 em {
+      color: var(--green);
+      font-style: normal;
+    }
+    .hero-sub {
+      font-size: 15px;
+      color: var(--text-mid);
+      font-weight: 500;
+      margin-bottom: 18px;
+      line-height: 1.5;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: var(--amber-pale);
+      border: 1.5px solid rgba(245,158,11,0.22);
+      border-radius: 99px;
+      padding: 9px 18px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #7C5B00;
+      margin-bottom: 28px;
+      line-height: 1.4;
+      max-width: 340px;
+    }
+    .hero-hint {
+      font-size: 13px;
+      color: var(--text-soft);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+    }
+    .hero-hint svg { animation: bounce 1.6s ease-in-out infinite; }
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(5px); }
+    }
+
+    /* =============================================
+       MAIN BLOCKS CONTAINER
+    ============================================= */
+    .main-blocks {
+      max-width: 500px;
+      margin: 0 auto;
+      padding: 22px 15px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    /* =============================================
+       BLOCK CARD BASE
+    ============================================= */
+    .block-card {
+      background: var(--white);
+      border-radius: var(--r);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      border: 2px solid transparent;
+      transition: border-color 0.35s ease, box-shadow 0.35s ease;
+    }
+    .block-card.answered {
+      border-color: rgba(37,193,111,0.28);
+    }
+    .block-card.answered .check-dot {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .block-header {
+      padding: 18px 20px 10px;
+    }
+    .block-meta {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      margin-bottom: 5px;
+    }
+    .block-num-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-soft);
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+    .check-dot {
+      width: 17px; height: 17px;
+      background: var(--green);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 9px;
+      color: white;
+      opacity: 0;
+      transform: scale(0.4);
+      transition: opacity 0.3s ease, transform 0.4s var(--spring);
+      flex-shrink: 0;
+    }
+    .block-q {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.4;
+    }
+    .block-hint {
+      font-size: 12.5px;
+      color: var(--text-soft);
+      margin-top: 4px;
+      font-weight: 400;
+    }
+    .block-body {
+      padding: 4px 20px 20px;
+    }
+
+    /* =============================================
+       SLIDER BLOCK
+    ============================================= */
+    .slider-emoji-big {
+      font-size: 36px;
+      text-align: center;
+      display: block;
+      margin-bottom: 6px;
+      transition: all 0.2s var(--spring);
+    }
+    .slider-number {
+      font-size: 36px;
+      font-weight: 900;
+      color: var(--green);
+      text-align: center;
+      display: block;
+      margin-bottom: 12px;
+      font-feature-settings: "tnum";
+      transition: color 0.2s;
+    }
+    input[type="range"] {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 7px;
+      border-radius: 99px;
+      outline: none;
+      cursor: pointer;
+      direction: ltr; /* always LTR for physical left=min, right=max */
+    }
+    /* Dynamic fill via CSS custom property */
+    input[type="range"].green-track {
+      background: linear-gradient(
+        to right,
+        var(--green) calc(var(--pct, 50%)),
+        #DDE3EA calc(var(--pct, 50%))
+      );
+    }
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      background: var(--white);
+      border: 3.5px solid var(--green);
+      box-shadow: 0 2px 10px rgba(37,193,111,0.35);
+      cursor: pointer;
+      transition: transform 0.15s var(--spring);
+    }
+    input[type="range"]:active::-webkit-slider-thumb {
+      transform: scale(1.25);
+    }
+    input[type="range"]::-moz-range-thumb {
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      background: var(--white);
+      border: 3.5px solid var(--green);
+      box-shadow: 0 2px 10px rgba(37,193,111,0.35);
+      cursor: pointer;
+    }
+    .slider-end-labels {
+      display: flex;
+      justify-content: space-between;
+      direction: ltr; /* match slider physical direction */
+      margin-top: 8px;
+    }
+    .slider-end-labels span {
+      font-size: 11.5px;
+      color: var(--text-soft);
+      font-weight: 500;
+      direction: rtl;
+    }
+
+    /* =============================================
+       COUNTER BLOCK
+    ============================================= */
+    .counter-layout {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      padding: 8px 0 4px;
+    }
+    .counter-btn {
+      width: 52px; height: 52px;
+      border-radius: 50%;
+      border: 2.5px solid var(--green);
+      background: transparent;
+      color: var(--green);
+      font-size: 26px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s var(--spring);
+      font-family: var(--font);
+      user-select: none;
+      -webkit-user-select: none;
+      line-height: 1;
+    }
+    .counter-btn:active {
+      background: var(--green);
+      color: white;
+      transform: scale(0.9);
+    }
+    .counter-center {
+      text-align: center;
+      min-width: 90px;
+    }
+    .counter-number {
+      font-size: 52px;
+      font-weight: 900;
+      color: var(--text);
+      line-height: 1;
+      display: block;
+      transition: transform 0.15s var(--spring);
+      font-feature-settings: "tnum";
+    }
+    .counter-emoji-sub {
+      font-size: 22px;
+      display: block;
+      margin-top: 4px;
+    }
+    .counter-unit {
+      font-size: 12px;
+      color: var(--text-soft);
+      font-weight: 500;
+      margin-top: 4px;
+      display: block;
+    }
+
+    /* =============================================
+       CHOICE PILLS (single select)
+    ============================================= */
+    .pill-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+    }
+    .pill {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      padding: 13px 15px;
+      border-radius: var(--r-sm);
+      border: 2px solid #E5E9EF;
+      background: var(--white);
+      cursor: pointer;
+      font-family: var(--font);
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+      text-align: right;
+      transition: all 0.2s ease;
+      width: 100%;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .pill:active { transform: scale(0.98); }
+    .pill.selected {
+      border-color: var(--green);
+      background: var(--green-pale);
+      color: var(--green-dark);
+    }
+    .pill-icon { font-size: 20px; flex-shrink: 0; }
+
+    /* =============================================
+       WHATSAPP CHAT SIMULATION (block 4)
+    ============================================= */
+    .chat-sim-wrap {
+      background: var(--chat-bg);
+      border-radius: var(--r-sm);
+      padding: 14px 14px 12px;
+      margin-bottom: 14px;
+      background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='30' cy='30' r='1' fill='%23000' fill-opacity='0.03'/%3E%3C/svg%3E");
+    }
+    .chat-datestamp {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+    .chat-datestamp span {
+      font-size: 11px;
+      color: #7C7575;
+      background: rgba(255,255,255,0.6);
+      border-radius: 99px;
+      padding: 3px 12px;
+      display: inline-block;
+    }
+    .chat-bubble {
+      background: var(--white);
+      border-radius: 3px 14px 14px 14px;
+      padding: 9px 12px 6px;
+      max-width: 78%;
+      width: fit-content;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.09);
+    }
+    .chat-bubble-name {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--green-dark);
+      margin-bottom: 3px;
+    }
+    .chat-bubble-text {
+      font-size: 14.5px;
+      color: var(--text);
+      line-height: 1.45;
+    }
+    .chat-bubble-time {
+      font-size: 10.5px;
+      color: #9CA3AF;
+      text-align: left;
+      margin-top: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 3px;
+    }
+    .chat-question-label {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 10px;
+    }
+    .chat-choice-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+    .chat-choice {
+      padding: 11px 12px;
+      border-radius: var(--r-sm);
+      border: 2px solid #E5E9EF;
+      background: var(--white);
+      font-family: var(--font);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s ease;
+      line-height: 1.4;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .chat-choice:active { transform: scale(0.96); }
+    .chat-choice.selected {
+      border-color: var(--green);
+      background: var(--green-pale);
+      color: var(--green-dark);
+    }
+
+    /* =============================================
+       MULTI-SELECT CHIPS (block 5)
+    ============================================= */
+    .chips-note {
+      font-size: 12px;
+      color: var(--text-soft);
+      margin-bottom: 12px;
+      font-weight: 500;
+    }
+    .chips-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+    }
+    .chip {
+      padding: 9px 15px;
+      border-radius: 99px;
+      border: 2px solid #E5E9EF;
+      background: var(--white);
+      font-family: var(--font);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-mid);
+      cursor: pointer;
+      transition: all 0.2s var(--spring);
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .chip.selected {
+      border-color: var(--green);
+      background: var(--green-pale);
+      color: var(--green-dark);
+      transform: scale(1.04);
+    }
+    .chip.chip-none.selected {
+      border-color: #CBD5E0;
+      background: #F7F8FA;
+      color: var(--text-soft);
+      transform: none;
+    }
+
+    /* =============================================
+       VOICE MESSAGE SCALE (block 8)
+    ============================================= */
+    .voice-scale {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .voice-row {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      padding: 11px 13px;
+      border-radius: var(--r-sm);
+      border: 2px solid #E5E9EF;
+      background: var(--white);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .voice-row:active { transform: scale(0.98); }
+    .voice-row.selected {
+      border-color: var(--green);
+      background: var(--green-pale);
+    }
+    .voice-row-emoji { font-size: 20px; flex-shrink: 0; }
+    .voice-row-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      flex-shrink: 0;
+      white-space: nowrap;
+    }
+    .voice-bar-bg {
+      flex: 1;
+      height: 7px;
+      background: #E5E9EF;
+      border-radius: 99px;
+      overflow: hidden;
+    }
+    .voice-bar-inner {
+      height: 100%;
+      border-radius: 99px;
+      background: linear-gradient(90deg, #6EE7A0, var(--green));
+      transition: width 0.3s ease;
+    }
+    .voice-row.selected .voice-bar-inner {
+      background: linear-gradient(90deg, var(--green), var(--green-dark));
+    }
+
+    /* =============================================
+       RESULTS CTA BUTTON
+    ============================================= */
+    .results-cta-wrap {
+      max-width: 500px;
+      margin: 0 auto;
+      padding: 8px 15px 20px;
+      display: none;
+    }
+    .results-cta-wrap.show {
+      display: block;
+      animation: fade-up 0.5s ease both;
+    }
+    .calculate-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+      padding: 17px 28px;
+      background: linear-gradient(135deg, var(--green-mid) 0%, var(--green) 60%, #4ADE80 100%);
+      color: white;
+      font-family: var(--font);
+      font-size: 17px;
+      font-weight: 800;
+      border: none;
+      border-radius: 99px;
+      cursor: pointer;
+      box-shadow: 0 5px 24px rgba(37,193,111,0.42);
+      transition: all 0.2s var(--spring);
+      letter-spacing: -0.3px;
+    }
+    .calculate-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(37,193,111,0.5); }
+    .calculate-btn:active { transform: scale(0.97); }
+
+    /* =============================================
+       RESULTS SECTION
+    ============================================= */
+    .results-section {
+      max-width: 500px;
+      margin: 0 auto;
+      padding: 0 15px 70px;
+      display: none;
+    }
+    .results-section.show {
+      display: block;
+      animation: fade-up 0.6s ease both;
+    }
+    @keyframes fade-up {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .result-card {
+      background: var(--white);
+      border-radius: 28px;
+      box-shadow: var(--shadow-lg);
+      overflow: hidden;
+    }
+
+    /* Score header */
+    .result-header {
+      background: linear-gradient(140deg, #16874C 0%, #1DAF62 40%, #25C16F 75%, #5EE890 100%);
+      padding: 40px 28px 30px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .result-header::before {
+      content: '';
+      position: absolute;
+      width: 220px; height: 220px;
+      background: rgba(255,255,255,0.07);
+      border-radius: 50%;
+      top: -90px; right: -70px;
+    }
+    .result-header::after {
+      content: '';
+      position: absolute;
+      width: 160px; height: 160px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 50%;
+      bottom: -70px; left: -50px;
+    }
+    .result-main-emoji {
+      font-size: 60px;
+      display: block;
+      margin-bottom: 14px;
+      position: relative;
+      z-index: 1;
+      animation: pop-in 0.55s var(--spring) both;
+    }
+    @keyframes pop-in {
+      from { transform: scale(0) rotate(-20deg); opacity: 0; }
+      to   { transform: scale(1) rotate(0deg);  opacity: 1; }
+    }
+    .result-score-num {
+      font-size: 88px;
+      font-weight: 900;
+      color: white;
+      line-height: 1;
+      letter-spacing: -4px;
+      display: block;
+      position: relative;
+      z-index: 1;
+      font-feature-settings: "tnum";
+    }
+    .result-score-label {
+      font-size: 16px;
+      color: rgba(255,255,255,0.68);
+      font-weight: 500;
+      margin-bottom: 14px;
+      position: relative;
+      z-index: 1;
+    }
+    .result-tier-title {
+      font-size: 22px;
+      font-weight: 800;
+      color: white;
+      position: relative;
+      z-index: 1;
+      letter-spacing: -0.5px;
+    }
+
+    /* Result body */
+    .result-body {
+      padding: 26px 24px 24px;
+    }
+    .result-desc {
+      font-size: 15px;
+      color: var(--text-mid);
+      line-height: 1.65;
+      text-align: center;
+      margin-bottom: 26px;
+    }
+
+    /* Share section */
+    .share-sep {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin-bottom: 20px;
+    }
+    .share-heading {
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--text-soft);
+      text-align: center;
+      margin-bottom: 12px;
+      letter-spacing: 0.3px;
+    }
+    .share-preview {
+      background: var(--bg);
+      border-radius: var(--r-sm);
+      padding: 14px 16px;
+      font-size: 14px;
+      color: var(--text-mid);
+      line-height: 1.65;
+      margin-bottom: 14px;
+      font-style: italic;
+      border: 1px solid rgba(0,0,0,0.05);
+    }
+    .share-buttons {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .share-btn {
+      flex: 1;
+      padding: 13px 12px;
+      border-radius: var(--r-sm);
+      border: none;
+      font-family: var(--font);
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.18s var(--spring);
+      -webkit-tap-highlight-color: transparent;
+    }
+    .share-btn:active { transform: scale(0.96); }
+    .btn-wa {
+      background: #25D366;
+      color: white;
+      box-shadow: 0 3px 12px rgba(37,211,102,0.32);
+    }
+    .btn-copy {
+      background: var(--amber-pale);
+      color: #7C5B00;
+      border: 1.5px solid rgba(245,158,11,0.25);
+    }
+    .btn-retry {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      width: 100%;
+      padding: 13px;
+      background: transparent;
+      border: 2px solid #E5E9EF;
+      border-radius: var(--r-sm);
+      font-family: var(--font);
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-soft);
+      cursor: pointer;
+      margin-top: 6px;
+      transition: all 0.2s ease;
+    }
+    .btn-retry:hover { border-color: var(--green); color: var(--green); }
+
+    /* =============================================
+       TOAST NOTIFICATION
+    ============================================= */
+    .toast {
+      position: fixed;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: #1A1A1E;
+      color: white;
+      font-size: 14px;
+      font-weight: 600;
+      padding: 12px 26px;
+      border-radius: 99px;
+      z-index: 999;
+      transition: transform 0.35s var(--spring);
+      white-space: nowrap;
+      pointer-events: none;
+    }
+    .toast.show { transform: translateX(-50%) translateY(0); }
+
+    /* =============================================
+       CONFETTI PARTICLE
+    ============================================= */
+    .confetti-wrap {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      pointer-events: none;
+      z-index: 998;
+      overflow: hidden;
+    }
+    .confetti-piece {
+      position: absolute;
+      width: 10px; height: 10px;
+      border-radius: 2px;
+      animation: confetti-fall linear both;
+    }
+    @keyframes confetti-fall {
+      0%   { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- =========================================
+     PROGRESS BAR
+========================================== -->
+<div class="progress-bar-wrap">
+  <div class="progress-top-row">
+    <span class="progress-app-name">מדד <span>הדודה</span> 👵</span>
+    <span class="progress-fraction" id="progressFraction">0 / 8</span>
+  </div>
+  <div class="progress-track">
+    <div class="progress-fill" id="progressFill"></div>
+  </div>
+</div>
+
+
+<!-- =========================================
+     HERO
+========================================== -->
+<div class="hero">
+  <div class="hero-bubble">👵</div>
+  <h1>מדד <em>הדודה</em></h1>
+  <p class="hero-sub">עד כמה את/ה הדודה של הקבוצה המשפחתית?</p>
+  <div class="hero-badge">
+    📱 בכל קבוצה משפחתית יש דודה.<br>השאלה היא רק אם זה את/ה.
+  </div>
+  <div class="hero-hint">
+    <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+    </svg>
+    גלגלו למטה ותענו על 8 שאלות
+  </div>
+</div>
+
+
+<!-- =========================================
+     BLOCKS CONTAINER
+========================================== -->
+<div class="main-blocks" id="blocksContainer">
+
+
+  <!-- ═══════════════════════════════════════
+       BLOCK 1 — Slider: Silence Tolerance
+  ════════════════════════════════════════ -->
+  <div class="block-card" id="block-1">
+    <div class="block-header">
+      <div class="block-meta">
+        <span class="block-num-label">שאלה 1 מתוך 8</span>
+        <div class="check-dot">✓</div>
+      </div>
+      <div class="block-q">עד כמה קשה לך לראות שהקבוצה שקטה?</div>
+      <div class="block-hint">הזז/י את הסליידר לפי תחושת הבטן</div>
+    </div>
+    <div class="block-body">
+      <span class="slider-emoji-big" id="b1-emoji">😌</span>
+      <span class="slider-number" id="b1-display">50</span>
+      <input
+        type="range" min="0" max="100" value="50"
+        class="green-track" id="b1-slider"
+        oninput="onSlider('b1', this.value)"
+      >
+      <div class="slider-end-labels">
+        <span>😌 בכיף, שקט = שלווה</span>
+        <span>😰 זה מציק, חייב/ת לעשות משהו</span>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════
+       BLOCK 2 — Counter: Stickers Per Day
+  ════════════════════════════════════════ -->
+  <div class="block-card" id="block-2">
+    <div class="block-header">
+      <div class="block-meta">
+        <span class="block-num-label">שאלה 2 מתוך 8</span>
+        <div class="check-dot">✓</div>
+      </div>
+      <div class="block-q">כמה סטיקרים את/ה מסוגל/ת לשלוח ביום טוב?</div>
+      <div class="block-hint">כשה-vibe בקבוצה טוב ויש על מה</div>
+    </div>
+    <div class="block-body">
+      <div class="counter-layout">
+        <button class="counter-btn" onclick="changeCounter(-1)" aria-label="פחות">−</button>
+        <div class="counter-center">
+          <span class="counter-number" id="b2-num">0</span>
+          <span class="counter-emoji-sub" id="b2-emoji">🙄</span>
+          <span class="counter-unit">סטיקרים</span>
+        </div>
+        <button class="counter-btn" onclick="changeCounter(1)" aria-label="יותר">+</button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════
+       BLOCK 3 — Choice: Unprompted Content
+  ════════════════════════════════════════ -->
+  <div class="block-card" id="block-3">
+    <div class="block-header">
+      <div class="block-meta">
+        <span class="block-num-label">שאלה 3 מתוך 8</span>
+        <div class="check-dot">✓</div>
+      </div>
+      <div class="block-q">בוקר ראשון אחרי חג. מה הסיכוי שתשלח/י משהו לקבוצה?</div>
+    </div>
+    <div class="block-body">
+      <div class="pill-grid">
+        <button class="pill" onclick="selectPill('b3', 0, this)">
+          <span class="pill-icon">🌵</span>
+          אפס. אחכה שמישהו אחר יתחיל
+        </button>
+        <button class="pill" onclick="selectPill('b3', 1, this)">
+          <span class="pill-icon">🤷</span>
+          אולי, אם יהיה משהו שווה
+        </button>
+        <button class="pill" onclick="selectPill('b3', 2, this)">
+          <span class="pill-icon">📤</span>
+          כן! חג שמח לא שולח את עצמו
+        </button>
+        <button class="pill" onclick="selectPill('b3', 3, this)">
+          <span class="pill-icon">⏰</span>
+          כבר שלחתי אמש — מחר עמוסה
+        </button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════
+       BLOCK 4 — WhatsApp Simulation
+  ════════════════════════════════════════ -->
+  <div class="block-card" id="block-4">
+    <div class="block-header">
+      <div class="block-meta">
+        <span class="block-num-label">שאלה 4 מתוך 8</span>
+        <div class="check-dot">✓</div>
+      </div>
+      <div class="block-q">הגיעה הודעה בקבוצה. מה את/ה עונה?</div>
+    </div>
+    <div class="block-body">
+      <!-- Simulated WhatsApp chat -->
+      <div class="chat-sim-wrap">
+        <div class="chat-datestamp"><span>היום</span></div>
+        <div class="chat-bubble">
+          <div class="chat-bubble-name">רותי 🌟</div>
+          <div class="chat-bubble-text">הגענו! 🏠 אנחנו כבר בדרך לחניה</div>
+          <div class="chat-bubble-time">
+            14:32
+            <svg width="15" height="11" viewBox="0 0 15 11" fill="none">
+              <path d="M1 5.5L4.5 9L9 3" stroke="#34B7F1" stroke-width="1.5" stroke-linecap="round"/>
+              <path d="M6 5.5L9.5 9L14 3" stroke="#34B7F1" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <div class="chat-question-label">👆 מה את/ה עונה?</div>
+      <div class="chat-choice-grid">
+        <button class="chat-choice" onclick="selectChat('b4', 0, this)">לא עונה 🙈</button>
+        <button class="chat-choice" onclick="selectChat('b4', 1, this)">❤️</button>
+        <button class="chat-choice" onclick="selectChat('b4', 2, this)">כיף! 🎉</button>
+        <button class="chat-choice" onclick="selectChat('b4', 3, this)">מעולה!! תעדכנו שנכנסתם ואם צריכים משהו 🙏❤️❤️</button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════
+       BLOCK 5 — Multi-select: Recent Content
+  ════════════════════════════════════════ -->
+  <div class="block-card" id="block-5">
+    <div class="block-header">
+      <div class="block-meta">
+        <span class="block-num-label">שאלה 5 מתוך 8</span>
+        <div class="check-dot">✓</div>
+      </div>
+      <div class="block-q">מה מתוך הדברים האלה שלחת לקבוצה בחודש האחרון?</div>
+    </div>
+    <div class="block-body">
+      <div class="chips-note">בחר/י כמה שרוצים. גם הכל.</div>
+      <div class="chips-wrap" id="b5-chips">
+        <button class="chip" onclick="toggleChip(this)">שבת שלום 🕯️</button>
+        <button class="chip" onclick="toggleChip(this)">חג שמח 🎉</button>
+        <button class="chip" onclick="toggleChip(this)">בוקר טוב + תמונה 🌅</button>
+        <button class="chip" onclick="toggleChip(this)">סרטון מצחיק 😂</button>
+        <button class="chip" onclick="toggleChip(this)">הודעה קולית 🎙️</button>
+        <button class="chip" onclick="toggleChip(this)">סטיקר 🫶</button>
+        <button class="chip" onclick="toggleChip(this)">"חשוב לקרוא" 📢</button>
+        <button class="chip" onclick="toggleChip(this)">"תעבירו הלאה" 🔁</button>
+        <button class="chip" onclick="toggleChip(this)">מזל טוב לבן/בת מישהו 🎂</button>
+        <button class="chip chip-none" onclick="toggleNoneChip(this)">כלום מהדברים האלה 🙅</button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════
+       BLOCK 6 — Slider: Overconfidence
+  ════════════════════════════════════════ -->
+  <div class="block-card" id="block-6">
+    <div class="block-header">
+      <div class="block-meta">
+        <span class="block-num-label">שאלה 6 מתוך 8</span>
+        <div class="check-dot">✓</div>
+      </div>
+      <div class="block-q">שלחת סרטון לקבוצה. עד כמה בטוח/ה שאף אחד לא שלח אותו לפניך?</div>
+    </div>
+    <div class="block-body">
+      <span class="slider-emoji-big" id="b6-emoji">🤷</span>
+      <span class="slider-number" id="b6-display">50</span>
+      <input
+        type="range" min="0" max="100" value="50"
+        class="green-track" id="b6-slider"
+        oninput="onSlider('b6', this.value)"
+      >
+      <div class="slider-end-labels">
+        <span>😬 בכלל לא בטוח/ה</span>
+        <span>💯 100%, ראיתי קודם</span>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════
+       BLOCK 7 — Scenario: Silent Group
+  ════════════════════════════════════════ -->
+  <div class="block-card" id="block-7">
+    <div class="block-header">
+      <div class="block-meta">
+        <span class="block-num-label">שאלה 7 מתוך 8</span>
+        <div class="check-dot">✓</div>
+      </div>
+      <div class="block-q">הקבוצה שקטה כבר 6 שעות. גם הדחקן של המשפחה שקט. מה את/ה עושה?</div>
+    </div>
+    <div class="block-body">
+      <div class="pill-grid">
+        <button class="pill" onclick="selectPill('b7', 0, this)">
+          <span class="pill-icon">🧘</span>
+          כלום. אם הם שקטים, כנראה הכל בסדר
+        </button>
+        <button class="pill" onclick="selectPill('b7', 1, this)">
+          <span class="pill-icon">📞</span>
+          מצלצל/ת לאחד מהם ישירות
+        </button>
+        <button class="pill" onclick="selectPill('b7', 2, this)">
+          <span class="pill-icon">🃏</span>
+          שולח/ת מם או ג'יף לשבור את השקט
+        </button>
+        <button class="pill" onclick="selectPill('b7', 3, this)">
+          <span class="pill-icon">😰</span>
+          כותב/ת "כולם בסדר??" עם שלושה לבבות
+        </button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════
+       BLOCK 8 — Voice Message Length Scale
+  ════════════════════════════════════════ -->
+  <div class="block-card" id="block-8">
+    <div class="block-header">
+      <div class="block-meta">
+        <span class="block-num-label">שאלה 8 מתוך 8</span>
+        <div class="check-dot">✓</div>
+      </div>
+      <div class="block-q">כמה ארוכה ההודעה הקולית הטיפוסית שלך?</div>
+    </div>
+    <div class="block-body">
+      <div class="voice-scale">
+
+        <button class="voice-row" onclick="selectVoice(0, this)">
+          <span class="voice-row-emoji">🔇</span>
+          <div class="voice-bar-bg"><div class="voice-bar-inner" style="width:0%"></div></div>
+          <span class="voice-row-label">לא שולח/ת קוליות</span>
+        </button>
+
+        <button class="voice-row" onclick="selectVoice(1, this)">
+          <span class="voice-row-emoji">⏱️</span>
+          <div class="voice-bar-bg"><div class="voice-bar-inner" style="width:22%"></div></div>
+          <span class="voice-row-label">~10 שניות</span>
+        </button>
+
+        <button class="voice-row" onclick="selectVoice(2, this)">
+          <span class="voice-row-emoji">🗣️</span>
+          <div class="voice-bar-bg"><div class="voice-bar-inner" style="width:48%"></div></div>
+          <span class="voice-row-label">1–2 דקות</span>
+        </button>
+
+        <button class="voice-row" onclick="selectVoice(3, this)">
+          <span class="voice-row-emoji">📢</span>
+          <div class="voice-bar-bg"><div class="voice-bar-inner" style="width:73%"></div></div>
+          <span class="voice-row-label">3–5 דקות (פודקאסט)</span>
+        </button>
+
+        <button class="voice-row" onclick="selectVoice(4, this)">
+          <span class="voice-row-emoji">🎙️🎙️</span>
+          <div class="voice-bar-bg"><div class="voice-bar-inner" style="width:100%"></div></div>
+          <span class="voice-row-label">ללא גבול... יש דברים שחייבים להסביר</span>
+        </button>
+
+      </div>
+    </div>
+  </div>
+
+
+</div><!-- /main-blocks -->
+
+
+<!-- =========================================
+     RESULTS CTA
+========================================== -->
+<div class="results-cta-wrap" id="resultsCta">
+  <button class="calculate-btn" onclick="showResults()">
+    👵 גלה/י את הציון שלך!
+  </button>
+</div>
+
+
+<!-- =========================================
+     RESULTS SECTION
+========================================== -->
+<div class="results-section" id="resultsSection">
+  <div class="result-card">
+
+    <div class="result-header">
+      <span class="result-main-emoji" id="rEmoji">👵</span>
+      <span class="result-score-num" id="rScore">0</span>
+      <div class="result-score-label">מתוך 100</div>
+      <div class="result-tier-title" id="rTitle">טוען...</div>
+    </div>
+
+    <div class="result-body">
+      <p class="result-desc" id="rDesc"></p>
+
+      <hr class="share-sep">
+      <div class="share-heading">שתפ/י את התוצאה 📲</div>
+      <div class="share-preview" id="rShareText"></div>
+
+      <div class="share-buttons">
+        <button class="share-btn btn-wa"   onclick="doShare()">📱 שתף/י</button>
+        <button class="share-btn btn-copy" onclick="doCopy()">📋 העתק/י</button>
+      </div>
+      <button class="btn-retry" onclick="resetAll()">🔄 לנסות שוב</button>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<!-- Confetti container -->
+<div class="confetti-wrap" id="confettiWrap"></div>
+
+
+<!-- =========================================
+     JAVASCRIPT
+========================================== -->
+<script>
+/* =============================================
+   STATE
+   All mutable values live here.
+============================================= */
+const state = {
+  b1: 50,   // slider 0–100
+  b2: 0,    // counter integer
+  b3: null, // choice index (0–3)
+  b4: null, // choice index (0–3)
+  b5: 0,    // count of selected content types
+  b6: 50,   // slider 0–100
+  b7: null, // choice index (0–3)
+  b8: null, // scale index (0–4)
+};
+
+const answered = {
+  b1: false, b2: false, b3: false, b4: false,
+  b5: false, b6: false, b7: false, b8: false,
+};
+
+let _shareText = '';
+let counterVal = 0;
+
+/* =============================================
+   SCORING CONFIGURATION
+   Edit weights and compute functions here.
+   Each compute() returns 0–100.
+============================================= */
+const SCORE_CONFIG = {
+  b1: {
+    label:   'סבלנות לשקט',
+    weight:  15,
+    compute: (v) => v  // slider value is already 0–100
+  },
+  b2: {
+    label:   'כמות סטיקרים',
+    weight:  10,
+    compute: (v) => {
+      if (v === 0) return 0;
+      if (v <= 2)  return 20;
+      if (v <= 5)  return 45;
+      if (v <= 15) return 70;
+      if (v <= 25) return 87;
+      return 100;
+    }
+  },
+  b3: {
+    label:   'שליחת תוכן ספונטני',
+    weight:  15,
+    // index: 0=לא, 1=אולי, 2=כן!, 3=שלחתי כבר אמש
+    compute: (v) => [0, 22, 78, 100][v ?? 0]
+  },
+  b4: {
+    label:   'תגובתיות בוואטסאפ',
+    weight:  10,
+    // index: 0=לא עונה, 1=❤️, 2=כיף, 3=תגובה מפורטת
+    compute: (v) => [0, 38, 62, 100][v ?? 0]
+  },
+  b5: {
+    label:   'תוכן שנשלח',
+    weight:  20,
+    // count of selected items (0–9), each item = ~13pts, capped at 100
+    compute: (v) => Math.min(v * 13, 100)
+  },
+  b6: {
+    label:   'ביטחון בחדשות',
+    weight:  10,
+    compute: (v) => v
+  },
+  b7: {
+    label:   'תגובה לשקט',
+    weight:  10,
+    // index: 0=כלום, 1=מצלצל, 2=מם, 3=כולם בסדר??
+    compute: (v) => [0, 18, 62, 100][v ?? 0]
+  },
+  b8: {
+    label:   'אורך קוליות',
+    weight:  10,
+    // scale: 0=לא שולח, 1=10 שניות, 2=1-2דק, 3=3-5דק, 4=ללא גבול
+    compute: (v) => [0, 15, 38, 78, 100][v ?? 0]
+  },
+};
+
+/* =============================================
+   RESULT TIERS
+   Adjust min/max, copy, share texts here.
+============================================= */
+const TIERS = [
+  {
+    min: 0, max: 20,
+    emoji: '🌵',
+    title: 'לא דודה בכלל 😎',
+    desc:  'יש בך אמון בסיסי באנושות. את/ה נותנ/ת לקבוצה לחיות בשלווה, בלי פיקוח הדוק. קצת מפחיד, בכנות. הקבוצה לא תישרד בלי ניהול?',
+    share: [
+      'קיבלתי {s} במדד הדודה 🌵\nמסתבר שאני יצור נדיר: לא שולח, לא מגיב, לא מתחיל.\nמחכה שמישהו אחר יעשה את העבודה 😎',
+      'מדד הדודה שלי: {s}/100 😎\nלא דודה בכלל. הקבוצה שקטה? מצוין. נוח לי כאן.',
+    ]
+  },
+  {
+    min: 21, max: 40,
+    emoji: '🙈',
+    title: 'דודה בהכחשה 🙈',
+    desc:  'על פניו את/ה רגוע/ה. אבל אם יש שקט יותר משלוש שעות, משהו קטן מתחיל לזוז. בעוד כמה שנים, תבדקי.',
+    share: [
+      'יצא לי {s} במדד הדודה 🙈\nאני בהכחשה. לא שולח הרבה. רק מדי פעם. כשצריך. בערך.',
+      'מדד הדודה שלי: {s}/100 🤫\nאני לא דודה! (אבל מגיב כמעט על הכל... סתם לציין)',
+    ]
+  },
+  {
+    min: 41, max: 60,
+    emoji: '📡',
+    title: 'דודה אזורית 📡',
+    desc:  'יש בך כבר אנרגיה של מעקב, ברכה ותגובה מהירה. עוד לא ועד בית, אבל בדרך. מישהו חייב לשמור על הקבוצה, נכון?',
+    share: [
+      'יצא לי {s} במדד הדודה 📡\nדודה אזורית. שולחת שבת שלום, אבל עוד לא מובילה מהפכה. עדיין.',
+      'מדד הדודה: {s}/100 🤭\nשלב הביניים. לא מתחיל/ת, לא גומר/ת. הדודה של הדודות.',
+    ]
+  },
+  {
+    min: 61, max: 80,
+    emoji: '👑',
+    title: 'דודה בכירה 👑',
+    desc:  'את/ה מחזיק/ה את האירוע, מניע/ה את הקבוצה, ומוודא/ת שאף שבת לא תיכנס בלי ברכה. תפקידך? קריטי לשרידות המשפחה.',
+    share: [
+      'יצא לי {s} במדד הדודה 👑\nמסתבר שאני לא בקבוצה המשפחתית — אני מנהל/ת אותה.',
+      'מדד הדודה: {s}/100 📱\nדודה בכירה. הקבוצה לא זזה בלעדיי. והם יודעים את זה.',
+    ]
+  },
+  {
+    min: 81, max: 100,
+    emoji: '👵',
+    title: 'יו"ר ועד הדודות 👵🏆',
+    desc:  'את/ה לא סתם משתתפ/ת בקבוצה — את/ה מוסד. בלי הסטיקר, הקולית וה"תעדכנו", המשפחה תתפרק. פשוטו כמשמעו.',
+    share: [
+      'קיבלתי {s}/100 במדד הדודה 👵🏆\nיו"ר ועד הדודות. זה לא תואר — זה אחריות.',
+      'מדד הדודה שלי: {s}/100 👵📱\nמסתבר שאני לא שולח/ת הודעות — אני מנהל/ת אקוסיסטם משפחתי.',
+    ]
+  },
+];
+
+/* =============================================
+   EMOJI MAPS FOR SLIDERS
+============================================= */
+const B1_EMOJIS = [
+  { upto: 15,  e: '😌' },
+  { upto: 35,  e: '🙂' },
+  { upto: 55,  e: '😬' },
+  { upto: 75,  e: '😤' },
+  { upto: 100, e: '😰' },
+];
+
+const B6_EMOJIS = [
+  { upto: 15,  e: '😬' },
+  { upto: 35,  e: '🤔' },
+  { upto: 55,  e: '🤷' },
+  { upto: 75,  e: '😏' },
+  { upto: 100, e: '💯' },
+];
+
+/* =============================================
+   SLIDER HANDLER
+============================================= */
+function onSlider(blockId, rawValue) {
+  const v = parseInt(rawValue, 10);
+  state[blockId] = v;
+
+  // Update display
+  document.getElementById(`${blockId}-display`).textContent = v;
+
+  // Pick emoji
+  const emojiMap = blockId === 'b1' ? B1_EMOJIS : B6_EMOJIS;
+  const entry = emojiMap.find(e => v <= e.upto) || emojiMap[emojiMap.length - 1];
+  document.getElementById(`${blockId}-emoji`).textContent = entry.e;
+
+  // Update track fill (CSS custom property)
+  document.getElementById(`${blockId}-slider`).style.setProperty('--pct', v + '%');
+
+  markDone(blockId);
+}
+
+// Init slider tracks on load
+document.getElementById('b1-slider').style.setProperty('--pct', '50%');
+document.getElementById('b6-slider').style.setProperty('--pct', '50%');
+
+/* =============================================
+   COUNTER HANDLER
+============================================= */
+function changeCounter(delta) {
+  counterVal = Math.max(0, Math.min(50, counterVal + delta));
+  state.b2 = counterVal;
+
+  const numEl   = document.getElementById('b2-num');
+  const emojiEl = document.getElementById('b2-emoji');
+
+  numEl.textContent = counterVal;
+
+  // Bounce animation
+  numEl.style.transform = 'scale(1.35)';
+  setTimeout(() => { numEl.style.transform = 'scale(1)'; }, 170);
+
+  // Emoji scaling
+  const emojis = ['🙄','😐','🙂','😄','🤩','👵🏻'];
+  const idx = counterVal === 0 ? 0
+    : counterVal <= 2 ? 1
+    : counterVal <= 6 ? 2
+    : counterVal <= 15 ? 3
+    : counterVal <= 25 ? 4
+    : 5;
+  emojiEl.textContent = emojis[idx];
+
+  markDone('b2');
+}
+
+/* =============================================
+   PILL (SINGLE SELECT)
+============================================= */
+function selectPill(blockId, index, el) {
+  state[blockId] = index;
+
+  // Deselect siblings
+  el.closest('.pill-grid').querySelectorAll('.pill').forEach(p => p.classList.remove('selected'));
+  el.classList.add('selected');
+
+  markDone(blockId);
+}
+
+/* =============================================
+   CHAT CHOICE
+============================================= */
+function selectChat(blockId, index, el) {
+  state[blockId] = index;
+
+  el.closest('.chat-choice-grid').querySelectorAll('.chat-choice').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+
+  markDone(blockId);
+}
+
+/* =============================================
+   MULTI-SELECT CHIPS
+============================================= */
+function toggleChip(el) {
+  // Deselect "כלום" chip if selecting real content
+  document.querySelector('.chip-none')?.classList.remove('selected');
+
+  el.classList.toggle('selected');
+
+  // Count real chips selected
+  const selected = [...document.querySelectorAll('#b5-chips .chip.selected')]
+    .filter(c => !c.classList.contains('chip-none'));
+  state.b5 = selected.length;
+
+  markDone('b5');
+}
+
+function toggleNoneChip(el) {
+  // Deselect all other chips
+  document.querySelectorAll('#b5-chips .chip').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+
+  state.b5 = 0;
+  markDone('b5');
+}
+
+/* =============================================
+   VOICE SCALE
+============================================= */
+function selectVoice(index, el) {
+  state.b8 = index;
+
+  document.querySelectorAll('.voice-row').forEach(r => r.classList.remove('selected'));
+  el.classList.add('selected');
+
+  markDone('b8');
+}
+
+/* =============================================
+   MARK DONE + UPDATE PROGRESS
+============================================= */
+function markDone(blockId) {
+  if (answered[blockId]) return;
+  answered[blockId] = true;
+
+  // Visual: add answered class to block card
+  const num = blockId.replace('b', '');
+  const card = document.getElementById(`block-${num}`);
+  if (card) card.classList.add('answered');
+
+  updateProgress();
+}
+
+function updateProgress() {
+  const total = Object.keys(answered).length;          // 8
+  const done  = Object.values(answered).filter(Boolean).length;
+
+  const pct = (done / total) * 100;
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressFraction').textContent = `${done} / ${total}`;
+
+  // Show CTA once all answered
+  if (done === total) {
+    const cta = document.getElementById('resultsCta');
+    cta.classList.add('show');
+    setTimeout(() => {
+      cta.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }, 350);
+  }
+}
+
+/* =============================================
+   CALCULATE SCORE  (weighted average)
+============================================= */
+function calcScore() {
+  let weightedSum = 0;
+  let totalWeight = 0;
+
+  for (const [key, cfg] of Object.entries(SCORE_CONFIG)) {
+    const raw   = state[key];
+    const score = cfg.compute(raw ?? 0);
+    weightedSum += score * cfg.weight;
+    totalWeight += cfg.weight;
+  }
+
+  return Math.round(weightedSum / totalWeight);
+}
+
+/* =============================================
+   SHOW RESULTS
+============================================= */
+function showResults() {
+  const score = calcScore();
+
+  // Find matching tier
+  const tier = TIERS.find(t => score >= t.min && score <= t.max)
+    || TIERS[TIERS.length - 1];
+
+  // Pick a random share template and replace {s} with score
+  const tpl = tier.share[Math.floor(Math.random() * tier.share.length)];
+  _shareText = tpl.replace(/{s}/g, score);
+
+  // Populate result card
+  document.getElementById('rEmoji').textContent  = tier.emoji;
+  document.getElementById('rTitle').textContent  = tier.title;
+  document.getElementById('rDesc').textContent   = tier.desc;
+  document.getElementById('rShareText').textContent = _shareText;
+
+  // Show section
+  const section = document.getElementById('resultsSection');
+  section.classList.add('show');
+
+  // Hide CTA
+  document.getElementById('resultsCta').style.display = 'none';
+
+  // Scroll to results after brief delay
+  setTimeout(() => {
+    section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 120);
+
+  // Animate score counter
+  animateScore(score);
+
+  // Celebrate if high score!
+  if (score >= 61) {
+    launchConfetti();
+  }
+}
+
+/* Counts up the score with easing */
+function animateScore(target) {
+  const el       = document.getElementById('rScore');
+  const duration = 1400;
+  const start    = performance.now();
+
+  function step(now) {
+    const t = Math.min((now - start) / duration, 1);
+    const eased = 1 - Math.pow(1 - t, 3); // ease-out cubic
+    el.textContent = Math.round(eased * target);
+    if (t < 1) requestAnimationFrame(step);
+  }
+
+  // Small delay so user has scrolled to results first
+  setTimeout(() => requestAnimationFrame(step), 500);
+}
+
+/* =============================================
+   SHARE / COPY
+============================================= */
+async function doShare() {
+  const text = _shareText + '\n\n🔗 ' + window.location.href;
+
+  if (navigator.share) {
+    try {
+      await navigator.share({ title: 'מדד הדודה 👵', text, url: window.location.href });
+      return;
+    } catch (_) {
+      // User cancelled — fall through to copy
+    }
+  }
+  doCopy();
+}
+
+async function doCopy() {
+  const text = _shareText + '\n\n🔗 ' + window.location.href;
+  try {
+    await navigator.clipboard.writeText(text);
+    showToast('הועתק! 📋✓');
+  } catch (_) {
+    showToast('לא הצלחתי להעתיק 😅');
+  }
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2700);
+}
+
+/* =============================================
+   CONFETTI
+============================================= */
+function launchConfetti() {
+  const wrap   = document.getElementById('confettiWrap');
+  const colors = ['#25C16F','#F59E0B','#F06B18','#4ADE80','#FBBF24','#34D399'];
+
+  for (let i = 0; i < 60; i++) {
+    const piece = document.createElement('div');
+    piece.className = 'confetti-piece';
+    piece.style.cssText = `
+      left:            ${Math.random() * 100}%;
+      background:      ${colors[Math.floor(Math.random() * colors.length)]};
+      width:           ${6 + Math.random() * 8}px;
+      height:          ${6 + Math.random() * 8}px;
+      border-radius:   ${Math.random() > 0.5 ? '50%' : '2px'};
+      animation-duration:   ${1.5 + Math.random() * 2}s;
+      animation-delay:      ${Math.random() * 0.8}s;
+    `;
+    wrap.appendChild(piece);
+  }
+
+  // Clean up after animation
+  setTimeout(() => { wrap.innerHTML = ''; }, 4000);
+}
+
+/* =============================================
+   RESET
+============================================= */
+function resetAll() {
+  // Reset state
+  state.b1 = 50; state.b2 = 0; state.b3 = null; state.b4 = null;
+  state.b5 = 0;  state.b6 = 50; state.b7 = null; state.b8 = null;
+  counterVal = 0;
+
+  // Reset answered flags
+  Object.keys(answered).forEach(k => answered[k] = false);
+
+  // ---- Reset UI ----
+
+  // Sliders
+  ['b1','b6'].forEach(id => {
+    const sl = document.getElementById(`${id}-slider`);
+    sl.value = 50;
+    sl.style.setProperty('--pct', '50%');
+    document.getElementById(`${id}-display`).textContent = '50';
+  });
+  document.getElementById('b1-emoji').textContent = '😌';
+  document.getElementById('b6-emoji').textContent = '🤷';
+
+  // Counter
+  document.getElementById('b2-num').textContent   = '0';
+  document.getElementById('b2-emoji').textContent = '🙄';
+
+  // Deselect all interactive elements
+  document.querySelectorAll('.pill.selected, .chat-choice.selected, .chip.selected, .voice-row.selected')
+    .forEach(el => el.classList.remove('selected'));
+
+  // Block cards
+  document.querySelectorAll('.block-card').forEach(c => c.classList.remove('answered'));
+
+  // Progress
+  document.getElementById('progressFill').style.width      = '0%';
+  document.getElementById('progressFraction').textContent  = '0 / 8';
+
+  // Show/hide sections
+  document.getElementById('resultsSection').classList.remove('show');
+  const cta = document.getElementById('resultsCta');
+  cta.style.display = '';
+  cta.classList.remove('show');
+
+  // Scroll to top
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+
+</body>
+</html>
