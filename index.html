@@ -57,6 +57,7 @@
       min-height: 100vh;
       -webkit-font-smoothing: antialiased;
       overflow-x: hidden;
+      touch-action: manipulation;
     }
 
     /* =============================================
@@ -305,6 +306,7 @@
       font-feature-settings: "tnum";
       transition: color 0.2s;
     }
+    button { touch-action: manipulation; }
     input[type="range"] {
       -webkit-appearance: none;
       appearance: none;
@@ -1757,20 +1759,22 @@ async function doScreenshot() {
     });
 
     const dataUrl = canvas.toDataURL('image/png');
+    const blob    = await (await fetch(dataUrl)).blob();
+    const file    = new File([blob], 'מדד-הדודה.png', { type: 'image/png' });
 
-    // Try Web Share API with file (works on mobile)
-    if (navigator.canShare) {
-      const blob = await (await fetch(dataUrl)).blob();
-      const file = new File([blob], 'מדד-הדודה.png', { type: 'image/png' });
-      if (navigator.canShare({ files: [file] })) {
+    // Try sharing the image file directly
+    if (navigator.share) {
+      try {
         await navigator.share({ files: [file], title: 'מדד הדודה 👵' });
         btn.textContent = '📸 שמור תמונה של התוצאה';
         btn.disabled = false;
         return;
+      } catch (shareErr) {
+        // User cancelled or files not supported — fall through to download
       }
     }
 
-    // Fallback: download as file
+    // Fallback: download
     const a = document.createElement('a');
     a.href = dataUrl;
     a.download = 'מדד-הדודה.png';
