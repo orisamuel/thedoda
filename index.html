@@ -1590,7 +1590,7 @@ function calcScore() {
     totalWeight += cfg.weight;
   }
 
-  return Math.round(weightedSum / totalWeight);
+  return Math.min(Math.round(weightedSum / totalWeight) + 12, 100);
 }
 
 /* =============================================
@@ -1654,21 +1654,63 @@ function animateScore(target) {
    SHARE / COPY
 ============================================= */
 async function doShare() {
-  const text = _shareText;
+  const shareBtn = document.querySelector('.btn-wa');
+  shareBtn.textContent = '⏳ מכין...';
+  shareBtn.disabled = true;
 
-  if (navigator.share) {
-    try {
-      await navigator.share({ title: 'מדד הדודה 👵', text });
-      return;
-    } catch (_) {}
+  try {
+    const card   = document.querySelector('.result-card');
+    const canvas = await html2canvas(card, {
+      scale: 2,
+      useCORS: true,
+      backgroundColor: '#ffffff',
+      logging: false,
+    });
+    const dataUrl = canvas.toDataURL('image/png');
+    const blob    = await (await fetch(dataUrl)).blob();
+    const file    = new File([blob], 'מדד-הדודה.png', { type: 'image/png' });
+
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: 'מדד הדודה 👵',
+          text: _shareText,
+          files: [file],
+        });
+        shareBtn.innerHTML = '<span>📤 שיתוף</span><span style="font-size:11px;font-weight:500;opacity:0.75;">(אפשר לשתף גם את אתם לא דודה 😉)</span>';
+        shareBtn.disabled = false;
+        return;
+      } catch (e) {
+        if (e.name !== 'AbortError') {
+          // files not supported — try without
+          try {
+            await navigator.share({ title: 'מדד הדודה 👵', text: _shareText });
+            shareBtn.innerHTML = '<span>📤 שיתוף</span><span style="font-size:11px;font-weight:500;opacity:0.75;">(אפשר לשתף גם את אתם לא דודה 😉)</span>';
+            shareBtn.disabled = false;
+            return;
+          } catch (_) {}
+        }
+      }
+    }
+
+    // Fallback: download image
+    const a = document.createElement('a');
+    a.href = dataUrl;
+    a.download = 'מדד-הדודה.png';
+    a.click();
+    showToast('התמונה הורדה! 📸');
+
+  } catch (e) {
+    showToast('לא הצלחתי ליצור תמונה 😅');
   }
-  doCopy();
+
+  shareBtn.innerHTML = '<span>📤 שיתוף</span><span style="font-size:11px;font-weight:500;opacity:0.75;">(אפשר לשתף גם את אתם לא דודה 😉)</span>';
+  shareBtn.disabled = false;
 }
 
 async function doCopy() {
-  const text = _shareText;
   try {
-    await navigator.clipboard.writeText(text);
+    await navigator.clipboard.writeText(_shareText);
     showToast('הועתק! 📋✓');
   } catch (_) {
     showToast('לא הצלחתי להעתיק 😅');
