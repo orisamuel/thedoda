@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
   <meta name="theme-color" content="#25C16F">
   <meta property="og:title" content="מדד הדודה 👵">
-  <meta property="og:description" content="בכל קבוצת וואטסאפ יש דודה. השאלה היא רק אם מדובר בך.">
+  <meta property="og:description" content="בכל קבוצה משפחתית יש דודה. השאלה היא רק אם זה את/ה.">
   <title>מדד הדודה 👵</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -1282,12 +1282,12 @@ let counterVal = 0;
 const SCORE_CONFIG = {
   b1: {
     label:   'סבלנות לשקט',
-    weight:  15,
+    weight:  20,
     compute: (v) => v  // slider value is already 0–100
   },
   b2: {
     label:   'כמות סטיקרים',
-    weight:  10,
+    weight:  20,
     compute: (v) => {
       if (v === 0) return 0;
       if (v <= 2)  return 20;
@@ -1299,13 +1299,13 @@ const SCORE_CONFIG = {
   },
   b3: {
     label:   'שליחת תוכן ספונטני',
-    weight:  15,
-    // index: 0=לא, 1=אולי, 2=כן!, 3=שלחתי כבר אמש
+    weight:  0,
+    // index: 0=לא, 1=אולי, 2=כן!, 3=ערב חג לא שקטה
     compute: (v) => [0, 22, 78, 100][v ?? 0]
   },
   b4: {
     label:   'תגובתיות בוואטסאפ',
-    weight:  10,
+    weight:  8,
     // index: 0=לא עונה, 1=❤️, 2=כיף, 3=תגובה מפורטת
     compute: (v) => [0, 38, 62, 100][v ?? 0]
   },
@@ -1317,18 +1317,18 @@ const SCORE_CONFIG = {
   },
   b6: {
     label:   'שליחת סרטון',
-    weight:  13,
+    weight:  20,
     compute: (v) => v
   },
   b7: {
-    label:   'תגובה לשקט',
-    weight:  10,
-    // index: 0=כלום, 1=מצלצל, 2=מם, 3=כולם בסדר??
+    label:   'העברת תוכן',
+    weight:  8,
+    // index: 0=פח, 1=קורא לא מעביר, 2=מעביר אחרי קריאה, 3=מעביר קודם
     compute: (v) => [0, 18, 62, 100][v ?? 0]
   },
   b8: {
     label:   'אורך קוליות',
-    weight:  7,
+    weight:  4,
     // scale: 0=לא שולח, 1=10 שניות, 2=1-2דק, 3=3-5דק, 4=ללא גבול
     compute: (v) => [0, 15, 38, 78, 100][v ?? 0]
   },
