@@ -1276,7 +1276,7 @@
   </div>
 </div>
 
-<!-- Toast -->
+<!-- v1.1 -->
 
 <div class="toast" id="toast"></div>
 
@@ -1624,9 +1624,9 @@ function showResults() {
     section.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }, 120);
 
-  // Pre-render share image in background
+  // Pre-render share image after score animation finishes (500ms delay + 1400ms anim)
   _cachedImageFile = null;
-  setTimeout(() => prepareShareImage(), 800);
+  setTimeout(() => prepareShareImage(), 2100);
 
   // Animate score counter
   animateScore(score);
