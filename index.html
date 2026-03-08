@@ -1192,7 +1192,7 @@
         </div>
         <button class="counter-btn" onclick="changeCounter2(1)" aria-label="יותר">+</button>
       </div>
-      <div id="b9-comment" style="text-align:center;font-size:13px;color:var(--text-soft);margin-top:12px;min-height:20px;font-weight:600;transition:all 0.2s ease;"></div>
+      <div id="b9-comment" style="display:none"></div>
     </div>
   </div>
 
@@ -1316,8 +1316,8 @@ const SCORE_CONFIG = {
     compute: (v) => Math.min(v * 13, 100)
   },
   b6: {
-    label:   'ביטחון בחדשות',
-    weight:  10,
+    label:   'שליחת סרטון',
+    weight:  13,
     compute: (v) => v
   },
   b7: {
@@ -1328,7 +1328,7 @@ const SCORE_CONFIG = {
   },
   b8: {
     label:   'אורך קוליות',
-    weight:  10,
+    weight:  7,
     // scale: 0=לא שולח, 1=10 שניות, 2=1-2דק, 3=3-5דק, 4=ללא גבול
     compute: (v) => [0, 15, 38, 78, 100][v ?? 0]
   },
@@ -1344,50 +1344,35 @@ const TIERS = [
     emoji: '🌵',
     title: 'לא דודה בכלל 🌵',
     desc:  'כרגע המצב שלך ממש טוב. אבל כדאי להיזהר — שמענו כבר על הרבה אנשים שהגיעו לגיל מסוים והתחילו לשלוח שבת שלום עם נרות וזמני כניסת השבת בכל יום שישי.',
-    share: [
-      'יצא לי {s} במדד הדודה 🌵\nלא דודה בכלל. עדיין.',
-      'מדד הדודה שלי: {s}/100 🌵\nהקבוצה שקטה? מצוין. נוח לי כאן.',
-    ]
+    share: ['יצא לי {s} במדד הדודה 🌵\nרוצים לבדוק גם? 👉\nthe-doda.com']
   },
   {
     min: 31, max: 45,
     emoji: '🙈',
     title: 'דודה בהכחשה 🙈',
-    desc:  'על פניו את/ה רגוע/ה. אבל אם יש שקט יותר משלוש שעות, משהו קטן מתחיל לזוז. בעוד כמה שנים, תבדקי.',
-    share: [
-      'יצא לי {s} במדד הדודה 🙈\nדודה בהכחשה. לא שולח/ת הרבה. רק מדי פעם. כשצריך. בערך.',
-      'מדד הדודה שלי: {s}/100 🙈\nאני לא דודה! (אבל מגיב/ה כמעט על הכל... סתם לציין)',
-    ]
+    desc:  'יש מצב שיש לך אח או אחות בהריון? כי יש כאן סימנים של מישהו שכבר כמעט דודה!',
+    share: ['יצא לי {s} במדד הדודה 🙈\nרוצים לבדוק גם? 👉\nthe-doda.com']
   },
   {
     min: 46, max: 63,
     emoji: '📡',
     title: 'דודה אזורית 📡',
     desc:  'עוד לא ממש דודה שרופה, אבל כבר כמעט שם. מישהו חייב לשמור על הקבוצה, אה?',
-    share: [
-      'יצא לי {s} במדד הדודה 📡\nדודה אזורית. עוד לא שרופה לגמרי, אבל בדרך.',
-      'מדד הדודה שלי: {s}/100 📡\nמישהו חייב לשמור על הקבוצה. ברור שזה אני.',
-    ]
+    share: ['יצא לי {s} במדד הדודה 📡\nרוצים לבדוק גם? 👉\nthe-doda.com']
   },
   {
     min: 64, max: 86,
     emoji: '👑',
     title: 'דודה בכירה 👑',
     desc:  'מה קורה דודה? אני בסדר סך הכל. כן כן, ראיתי שחיסלו את הנשיא הלבנוני בדיוק בפרשת ויחסל. מדהים וואו. תודה ששלחת.',
-    share: [
-      'יצא לי {s} במדד הדודה 👑\nדודה בכירה. הקבוצה לא זזה בלעדיי. והם יודעים את זה.',
-      'מדד הדודה שלי: {s}/100 👑\nמסתבר שאני לא בקבוצה — אני מנהל/ת אותה.',
-    ]
+    share: ['יצא לי {s} במדד הדודה 👑\nרוצים לבדוק גם? 👉\nthe-doda.com']
   },
   {
     min: 87, max: 100,
     emoji: '👵',
     title: 'דודה שרופה 👵🔥',
     desc:  'היינו אומרים שכדאי לשתף את הציון שלך, אבל זה בטח כבר יצא בתפוצת נאט"ו, אה?',
-    share: [
-      'יצא לי {s} במדד הדודה 👵🔥\nדודה שרופה. זה לא תואר — זה אורח חיים.',
-      'מדד הדודה שלי: {s}/100 👵\nהייתי משתף/ת את הציון אבל הוא כבר יצא בתפוצת נאט"ו.',
-    ]
+    share: ['יצא לי {s} במדד הדודה 👵🔥\nרוצים לבדוק גם? 👉\nthe-doda.com']
   },
 ];
 
@@ -1631,21 +1616,19 @@ function animateScore(target) {
    SHARE / COPY
 ============================================= */
 async function doShare() {
-  const text = _shareText + '\n\n🔗 https://the-doda.com';
+  const text = _shareText;
 
   if (navigator.share) {
     try {
       await navigator.share({ title: 'מדד הדודה 👵', text, url: 'https://the-doda.com' });
       return;
-    } catch (_) {
-      // User cancelled — fall through to copy
-    }
+    } catch (_) {}
   }
   doCopy();
 }
 
 async function doCopy() {
-  const text = _shareText + '\n\n🔗 https://the-doda.com';
+  const text = _shareText;
   try {
     await navigator.clipboard.writeText(text);
     showToast('הועתק! 📋✓');
