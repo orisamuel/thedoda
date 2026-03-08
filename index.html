@@ -1590,7 +1590,7 @@ function calcScore() {
     totalWeight += cfg.weight;
   }
 
-  return Math.min(Math.round(weightedSum / totalWeight) + 12, 100);
+  return Math.min(Math.round(weightedSum / totalWeight) + 6, 100);
 }
 
 /* =============================================
@@ -1624,6 +1624,10 @@ function showResults() {
     section.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }, 120);
 
+  // Pre-render share image in background
+  _cachedImageFile = null;
+  setTimeout(() => prepareShareImage(), 800);
+
   // Animate score counter
   animateScore(score);
 
@@ -1650,14 +1654,9 @@ function animateScore(target) {
   setTimeout(() => requestAnimationFrame(step), 500);
 }
 
-/* =============================================
-   SHARE / COPY
-============================================= */
-async function doShare() {
-  const shareBtn = document.querySelector('.btn-wa');
-  shareBtn.textContent = '⏳ מכין...';
-  shareBtn.disabled = true;
+let _cachedImageFile = null;
 
+async function prepareShareImage() {
   try {
     const card   = document.querySelector('.result-card');
     const canvas = await html2canvas(card, {
@@ -1668,44 +1667,30 @@ async function doShare() {
     });
     const dataUrl = canvas.toDataURL('image/png');
     const blob    = await (await fetch(dataUrl)).blob();
-    const file    = new File([blob], 'מדד-הדודה.png', { type: 'image/png' });
-
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title: 'מדד הדודה 👵',
-          text: _shareText,
-          files: [file],
-        });
-        shareBtn.innerHTML = '<span>📤 שיתוף</span><span style="font-size:11px;font-weight:500;opacity:0.75;">(אפשר לשתף גם את אתם לא דודה 😉)</span>';
-        shareBtn.disabled = false;
-        return;
-      } catch (e) {
-        if (e.name !== 'AbortError') {
-          // files not supported — try without
-          try {
-            await navigator.share({ title: 'מדד הדודה 👵', text: _shareText });
-            shareBtn.innerHTML = '<span>📤 שיתוף</span><span style="font-size:11px;font-weight:500;opacity:0.75;">(אפשר לשתף גם את אתם לא דודה 😉)</span>';
-            shareBtn.disabled = false;
-            return;
-          } catch (_) {}
-        }
-      }
-    }
-
-    // Fallback: download image
-    const a = document.createElement('a');
-    a.href = dataUrl;
-    a.download = 'מדד-הדודה.png';
-    a.click();
-    showToast('התמונה הורדה! 📸');
-
+    _cachedImageFile = new File([blob], 'מדד-הדודה.png', { type: 'image/png' });
   } catch (e) {
-    showToast('לא הצלחתי ליצור תמונה 😅');
+    _cachedImageFile = null;
   }
+}
+/* =============================================
+   SHARE / COPY
+============================================= */
+async function doShare() {
+  if (!navigator.share) { doCopy(); return; }
 
-  shareBtn.innerHTML = '<span>📤 שיתוף</span><span style="font-size:11px;font-weight:500;opacity:0.75;">(אפשר לשתף גם את אתם לא דודה 😉)</span>';
-  shareBtn.disabled = false;
+  try {
+    if (_cachedImageFile && navigator.canShare && navigator.canShare({ files: [_cachedImageFile] })) {
+      await navigator.share({
+        title: 'מדד הדודה 👵',
+        text: _shareText,
+        files: [_cachedImageFile],
+      });
+    } else {
+      await navigator.share({ title: 'מדד הדודה 👵', text: _shareText });
+    }
+  } catch (e) {
+    if (e.name !== 'AbortError') doCopy();
+  }
 }
 
 async function doCopy() {
